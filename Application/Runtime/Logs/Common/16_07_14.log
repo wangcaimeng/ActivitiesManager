@@ -1,0 +1,6 @@
+[ 2016-07-14T12:47:36+08:00 ] ::1 /index.php/js/bootstrap.min.js
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000033s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000931s ]
+ERR: 无法加载模块:Js
+
