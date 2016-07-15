@@ -14,23 +14,32 @@ use Think\Controller;
 class LoginController extends Controller
 {	
     public function login(){
-        $manager = 'wangcaimeng';
-		$user = 'BuaaClimber';
-		$password = "123";
-		if(!I('post.username')){
-			$this->error("请输入用户名！");
-		}else if (!I('post.password')) {
-			$this->error("请输入密码！");
-		}else if (I('post.username')==$manager&&I('post.password')==$password) {
-			session_start();
-			$_SESSION['username']=I('post.username');
-			$this->success("管理员登录成功，跳转至管理界面",U("/Home/Manager/listAll"));
-		}else if(I('post.username')==$user&&I('post.password')==$password){
-            session_start();
-            $_SESSION['username']=I('post.username');
-            $this->success("普通用户登录成功，跳转至管理界面",U("/Home/User/listAll"));
+        $usernameIn = I('post.username');
+        $passwordIn = I('post.password');
+        $userTypeIn = I('post.type');
+        $userModel = D('User');
+        $userlist = $userModel->select();
+        $flag = false;
+        foreach($userlist as $user){
+            if($usernameIn==$user['username']&&$passwordIn==$user['password']&&$userTypeIn==$user['type']){
+                $flag = true;
+            }
+        }
+        dump($flag);
+        if ($flag){
+            if($userTypeIn=='manager'){
+                session_start();
+                $_SESSION['username']=$usernameIn;
+                $_SESSION['userType']=$userTypeIn;
+                $this->success("管理员登录成功，正在跳转到管理员页面",U('Home/Manager/listAll'));
+            }else{
+                session_start();
+                $_SESSION['username']=$usernameIn;
+                $_SESSION['userType']=$userTypeIn;
+                $this->success("普通用户登录成功，正在跳转到普通用户界面",U('Home/User/listAll'));
+            }
         }else{
-            $this->error("用户名或密码错误！");
+            $this->error("账号或密码或用户类别错误，请重新登录！");
         }
     }
 }

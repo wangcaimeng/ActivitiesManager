@@ -14,20 +14,30 @@ use Think\Controller;
 class UserController extends Controller
 {
     public function listAll(){
-        if(I('session.username')!='BuaaClimber'){
-            $this->error("请您先登录！",U('Home/Index/index'));
+        if(!I('session.username')||I('session.userType')!='user'){
+            $this->error("请您先以用户身份登录！",U('Home/Index/index'));
         }
-        $UserModel = D('User');
-        $list= $UserModel->select();
+        $Signup_userModel = D('Signup_user');
+        $list= $Signup_userModel->select();
         $this->assign('list',$list);
         $this->display();
     }
 
     public function signUp(){
-        $UserModel = D('User');
+        $Signup_userModel = D('Signup_user');
         $data=array('name'=>I('post.name'),'phonenum'=>I('post.phonenum'));
-        $UserModel->data($data)->add();
-        $this->success('添加成功！',U('Home/User/listAll'));
+        $Signup_userModel->data($data)->add();
+        $this->success('报名成功！',U('Home/User/listAll'));
+    }
+
+    public function signUpForThisUser(){
+        $Signup_userModel = D('Signup_user');
+        $UserModel = D('User');
+        session_start();
+        $data = $UserModel->where(array('username'=>I('session.username')))->find();
+        $data = array('name'=>$data['username'],'phonenum'=>$data['phonenum']);
+        $Signup_userModel->data($data)->add();
+        $this->success("报名成功！",U('Home/User/listAll'));
     }
 
 }

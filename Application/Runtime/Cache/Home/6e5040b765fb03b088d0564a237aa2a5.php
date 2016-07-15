@@ -7,11 +7,10 @@
 		<title>普通用户页面</title>
 
 		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-		
+		<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 
 		<style>
-			
+
 			.row{
 				border-color: rgb(0,0,0);
 				border-width: 3px;
@@ -20,6 +19,9 @@
 			.title-row{
 				font-size: 20px;
 				background-color: rgba(0,0,255,.1);
+			}
+			.userList{
+				margin-top: 100px;
 			}
 		</style>
 		
@@ -41,52 +43,75 @@
 		                <li><a href="/">Home</a></li>
 		                <li><a href="#">About</a></li>
 		            </ul>
+					<button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#signUpModal"  style="margin-top:10px;margin-left: 500px">报名</button>
 		        </div>
+
 		    </div>
 		</nav>
-		<h1 class="text-center" style="padding-top:50px" id='myh1'>普通用户页面</h1>
-		<div class="container">
-			<div class="signUp">
-				<form action="<?php echo U('Home/User/signUp');?>" method="post">
-					<div class="row">
-						<div class="col-lg-1">姓名</div>
-						<div class="col-lg-4"><input type="text" name="name" ></div>
+
+		<div class="modal fade" id="signUpModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">报名</h4>
 					</div>
-					<div class="row">
-						<div class="col-lg-1">手机号</div>
-						<div class="col-lg-4"><input type="password" name="phonenum"></div>
+					<div class="modal-body">
+						<button class="btn btn-success btn-lg" id="btn_signUpForThisUser">为自己报名(根据注册信息)</button>
+						<form action="<?php echo U('Home/User/signUp');?>" method="post">
+							<div class="form-group">
+								<label>姓名</label>
+								<input type="text" name="name" class="form-control" placeholder="请输入姓名">
+							</div>
+							<div class="form-group">
+								<label>手机号</label>
+								<input type="text" name="phonenum" class="form-control" placeholder="请输入手机号">
+							</div>
+							<div class="form-group">
+								<input type="reset" class="btn btn-warning" value="重置">
+								<input type="submit" class="btn btn-primary" value="报名">
+							</div>
+						</form>
 					</div>
-					<div class="row">
-						<div class="col-lg-1"><input type="reset" class='btn btn-primary btn-sm' value="重置"></div>
-						<div class="col-lg-4"><input type="submit" class='btn btn-primary btn-sm' value="报名"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 					</div>
-				</form>
-			</div>
-		</div>
-		<div class="container">
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+		<div class="userList">
+			<h1 class="text-center" id='myh1'>普通用户页面</h1>
+			<div class="container">
 				<div class="row">
 					<div class="title-row">
-						<div class='col-md-4'>ID</div>
-						<div class='col-md-4'>姓名</div>
-						<div class='col-md-4'>手机号</div>
+						<div class='col-xs-4'>ID</div>
+						<div class='col-xs-4'>姓名</div>
+						<div class='col-xs-4'>手机号</div>
 					</div>
 				</div>
 			</div>
-		<?php if(is_array($list)): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><div class="container">
-				<div class="row">
-					<div class='col-md-4'><?php echo ($vo["id"]); ?></div>
-					<div class='col-md-4'><?php echo ($vo["name"]); ?></div>
-					<div class='col-md-4'><?php echo ($vo["phonenum"]); ?></div>
-				</div>
-			</div><?php endforeach; endif; else: echo "" ;endif; ?>
+			<?php if(is_array($list)): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><div class="container">
+					<div class="row">
+						<div class='col-xs-4'><?php echo ($vo["id"]); ?></div>
+						<div class='col-xs-4'><?php echo ($vo["name"]); ?></div>
+						<div class='col-xs-4'><?php echo ($vo["phonenum"]); ?></div>
+					</div>
+				</div><?php endforeach; endif; else: echo "" ;endif; ?>
+		</div>
 
-		<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-		<!-- Bootstrap JavaScript -->
-		<script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 		<script>
-
-
+			$(document).ready(function () {
+				$('#btn_signUpForThisUser').click(function () {
+					if(confirm("将根据用户注册信息进行报名，确定继续吗？")){
+						window.location='signUpForThisUser';
+					}
+				});
+			});
 		</script>
-
 	</body>
 </html>
